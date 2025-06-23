@@ -17,7 +17,7 @@ st.markdown("Enter a message and this app will detect potential emotional distre
 # Input
 user_input = st.text_area("📝 Message", placeholder="Paste a message here...", height=150)
 
-if st.button("🔍 Analyze"):
+if st.button("🔍 Analyze (Predifined Model)"):
     if user_input.strip():
         with st.spinner("Analyzing..."):
             results = classifier(user_input)[0]
