@@ -108,5 +108,7 @@ old_app.py
 # Old versions of the app
 
 # Ignore fine-tuned model outputs
-App/model/distress_classifier/
+App/model/distress_classifier/ 
+# Ignore checkpoints and model outputs
+
 App/model/checkpoints/
