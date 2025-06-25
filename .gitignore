@@ -106,3 +106,7 @@ App/model/merge_distress_datasets.py
 
 old_app.py 
 # Old versions of the app
+
+# Ignore fine-tuned model outputs
+App/model/distress_classifier/
+App/model/checkpoints/
