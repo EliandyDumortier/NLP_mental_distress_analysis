@@ -112,3 +112,7 @@ App/model/distress_classifier/
 # Ignore checkpoints and model outputs
 
 App/model/checkpoints/
+
+eval "$(ssh-agent -s)"
+# SSH agent
+eval "$(ssh-agent -s)".pub
