@@ -116,11 +116,71 @@ def load_css():
     }
     
     .about-section {
-        background: white;
+        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,242,245,0.95) 100%);
+        backdrop-filter: blur(10px);
         border-radius: 15px;
         padding: 25px;
         margin: 20px 0;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .about-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.1;
+        z-index: -1;
+    }
+    
+    .about-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+    }
+    
+    .feature-card {
+        background: rgba(24, 119, 242, 0.1);
+        border-radius: 10px;
+        padding: 15px;
+        border-left: 3px solid #1877f2;
+    }
+    
+    .stats-row {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+    
+    .stat-item {
+        text-align: center;
+        margin: 10px;
+    }
+    
+    .stat-number {
+        font-size: 2em;
+        font-weight: bold;
+        color: #1877f2;
+    }
+    
+    .stat-label {
+        font-size: 0.9em;
+        color: #65676b;
     }
     
     /* Navigation */
@@ -181,30 +241,78 @@ def save_help_message(message, feelings, help_type="general"):
 def create_about_section():
     return """
     <div class="about-section">
-        <h2>🤝 Welcome to Friendbook</h2>
-        <p><strong>Your Mental Health Companion</strong></p>
-        
-        <h3>🎯 Our Purpose</h3>
-        <p>Friendbook is an AI-powered social network designed to support mental health and well-being. Our advanced NLP model analyzes posts to identify users who may need support and connects them with help resources.</p>
-        
-        <h3>🧠 AI Model Performance</h3>
-        <ul>
-            <li><strong>Accuracy:</strong> 94.2% on validation set</li>
-            <li><strong>F1-Score:</strong> 93.8% weighted average</li>
-            <li><strong>Model:</strong> Fine-tuned DistilBERT for distress classification</li>
-            <li><strong>Classes:</strong> No Distress, Mild, Moderate, Severe</li>
-        </ul>
-        
-        <h3>✨ Features</h3>
-        <ul>
-            <li>Real-time emotional distress detection</li>
-            <li>Immediate support for users in need</li>
-            <li>Privacy-focused help system</li>
-            <li>Community-driven mental health support</li>
-        </ul>
-        
-        <h3>🔒 Privacy & Safety</h3>
-        <p>Your mental health is our priority. All conversations are confidential, and our AI helps connect you with appropriate resources while maintaining your privacy.</p>
+        <div class="about-content">
+            <h1 style="text-align: center; color: #1877f2; margin-bottom: 30px;">
+                🤝 Welcome to Friendbook
+            </h1>
+            <p style="text-align: center; font-size: 1.2em; color: #1c1e21; margin-bottom: 30px;">
+                <strong>Your AI-Powered Mental Health Companion</strong>
+            </p>
+            
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-number">94.2%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">93.8%</div>
+                    <div class="stat-label">F1-Score</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Distress Levels</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #1877f2; margin-top: 25px;">🎯 Our Mission</h3>
+            <p>Friendbook revolutionizes social media by putting mental health first. Our advanced AI analyzes posts in real-time to identify users who may need support, creating a safer and more caring online community.</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🧠 AI-Powered Detection</h4>
+                    <p>Advanced NLP model trained on mental health data</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💙 Immediate Support</h4>
+                    <p>Instant help when distress is detected</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔒 Privacy First</h4>
+                    <p>Your conversations remain confidential</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🤝 Community Care</h4>
+                    <p>Connect with others who understand</p>
+                </div>
+            </div>
+            
+            <h3 style="color: #1877f2; margin-top: 25px;">🧠 AI Technology</h3>
+            <p>Our model uses fine-tuned DistilBERT to classify emotional distress into four categories:</p>
+            <ul style="margin-left: 20px;">
+                <li><strong>No Distress:</strong> Normal, positive communication</li>
+                <li><strong>Mild:</strong> Minor concerns or everyday stress</li>
+                <li><strong>Moderate:</strong> Significant emotional distress</li>
+                <li><strong>Severe:</strong> Critical situations requiring immediate help</li>
+            </ul>
+            
+            <h3 style="color: #1877f2; margin-top: 25px;">🚨 Emergency Resources</h3>
+            <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                <p><strong>Crisis Hotlines:</strong></p>
+                <ul>
+                    <li><strong>US:</strong> 988 (Suicide & Crisis Lifeline)</li>
+                    <li><strong>Text:</strong> HOME to 741741</li>
+                    <li><strong>International:</strong> befrienders.org</li>
+                </ul>
+            </div>
+            
+            <p style="text-align: center; margin-top: 25px; font-style: italic; color: #65676b;">
+                Remember: You're never alone, and it's okay to ask for help ❤️
+            </p>
+        </div>
     </div>
     """
 
@@ -243,7 +351,8 @@ def show_login_page():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown(create_about_section(), unsafe_allow_html=True)
+        st.html(create_about_section()#, unsafe_allow_html=True
+                )
 
 # Model loading
 @st.cache_resource
@@ -258,6 +367,10 @@ def load_models():
 if "role" not in st.session_state:
     show_login_page()
     st.stop()
+
+# Initialize username if not set
+if "username" not in st.session_state:
+    st.session_state.username = "user" if st.session_state.role == "user" else "admin"
 
 # Load models after authentication
 predef_clf, tokenizer_ft, model_ft = load_models()
@@ -370,7 +483,7 @@ if page == "🏠 Feed":
                 preds = predict_finetuned(text)
                 top = max(preds, key=lambda p: p["score"])
                 flagged = top["label"] in {"moderate", "severe"}
-                
+
                 # Save post
                 post_data = {
                     "text": text,
@@ -380,21 +493,26 @@ if page == "🏠 Feed":
                     "username": st.session_state.username
                 }
                 st.session_state.posts.append(post_data)
-                
+
+                # Store flagged state in session
+                st.session_state.last_post_flagged = flagged
+
                 if flagged:
                     save_alert(text, preds)
                     st.success("📝 Post shared successfully!")
-                    
-                    # Show help prompt
                     st.markdown("---")
                     st.error("🚨 **We noticed you might need support**")
                     st.markdown("Your well-being matters to us. Would you like to connect with someone?")
-                    
-                    if st.button("💙 Yes, I'd like help"):
-                        st.session_state.show_help_modal = True
-                        st.rerun()
-                else:
-                    st.success("📝 Post shared successfully!")
+        else:
+            # If no post was just made, ensure the variable exists
+            if "last_post_flagged" not in st.session_state:
+                st.session_state.last_post_flagged = False
+
+    # Place this OUTSIDE the form, after the form block
+    if st.session_state.last_post_flagged and st.button("💙 Yes, I'd like help"):
+        st.session_state.show_help_modal = True
+        st.session_state.last_post_flagged = False  # Reset after showing modal
+        st.rerun()
     
     # Show help modal if requested
     if st.session_state.get("show_help_modal", False):
@@ -614,7 +732,10 @@ elif page == "🚨 Alerts List":
         st.markdown(f"**📊 Showing {len(filtered_df)} of {len(df)} alerts**")
         
         for idx, row in filtered_df.iterrows():
-            with st.expander(f"⚠️ {row['level'].title()} Alert - {row['timestamp'][:19]}"):
+            # Fix timestamp formatting
+            timestamp_str = str(row['timestamp'])[:19] if len(str(row['timestamp'])) > 19 else str(row['timestamp'])
+            
+            with st.expander(f"⚠️ {row['level'].title()} Alert - {timestamp_str}"):
                 st.markdown(f"**📝 Message:** {row['text']}")
                 
                 # Parse predictions
@@ -666,7 +787,10 @@ elif page == "💬 Help Messages":
             
             # Display messages
             for idx, row in filtered_df.iterrows():
-                with st.expander(f"💙 {row['help_type']} - {row['user_id']} - {row['timestamp'][:19]}"):
+                # Fix timestamp formatting
+                timestamp_str = str(row['timestamp'])[:19] if len(str(row['timestamp'])) > 19 else str(row['timestamp'])
+                
+                with st.expander(f"💙 {row['help_type']} - {row['user_id']} - {timestamp_str}"):
                     st.markdown(f"**😔 How they're feeling:**")
                     st.markdown(f"> {row['feelings']}")
                     
@@ -723,25 +847,28 @@ elif page == "📈 Analytics":
             st.markdown("#### 📊 Training History")
             if 'training_history' in training_results:
                 history_df = pd.DataFrame(training_results['training_history'])
-                fig = make_subplots(specs=[[{"secondary_y": True}]])
-                
-                fig.add_trace(
-                    go.Scatter(x=history_df['epoch'], y=history_df['train_loss'], 
-                              name="Training Loss"),
-                    secondary_y=False,
-                )
-                
-                fig.add_trace(
-                    go.Scatter(x=history_df['epoch'], y=history_df['eval_accuracy'], 
-                              name="Validation Accuracy"),
-                    secondary_y=True,
-                )
-                
-                fig.update_xaxes(title_text="Epoch")
-                fig.update_yaxes(title_text="Loss", secondary_y=False)
-                fig.update_yaxes(title_text="Accuracy", secondary_y=True)
-                
-                st.plotly_chart(fig, use_container_width=True)
+                if not history_df.empty:
+                    fig = make_subplots(specs=[[{"secondary_y": True}]])
+                    
+                    if 'train_loss' in history_df.columns:
+                        fig.add_trace(
+                            go.Scatter(x=history_df['epoch'], y=history_df['train_loss'], 
+                                      name="Training Loss"),
+                            secondary_y=False,
+                        )
+                    
+                    if 'eval_accuracy' in history_df.columns:
+                        fig.add_trace(
+                            go.Scatter(x=history_df['epoch'], y=history_df['eval_accuracy'], 
+                                      name="Validation Accuracy"),
+                            secondary_y=True,
+                        )
+                    
+                    fig.update_xaxes(title_text="Epoch")
+                    fig.update_yaxes(title_text="Loss", secondary_y=False)
+                    fig.update_yaxes(title_text="Accuracy", secondary_y=True)
+                    
+                    st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("🔄 Training results not available. Run the model training script to generate analytics.")
     
