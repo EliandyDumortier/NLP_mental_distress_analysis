@@ -1,0 +1,108 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytest
+.cache/
+.pytest_cache/
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Logs
+*.log
+
+# Data
+*.csv
+*.tsv
+*.dat
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Model files
+*.h5
+*.hdf5
+*.pkl
+*.joblib
+*.pt
+*.ckpt
+
+# NLP/ML specific
+*.spacy
+*.vector
+*.bin
+
+# Local config
+*.env
+.env.*
+*.secret
+secrets/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+#Scripts
+App/model/build_emotion_distress_dataset.py
+App/model/prepare_distress_dataset.py
+App/model/merge_distress_datasets.py
+
+old_app.py 
+# Old versions of the app
