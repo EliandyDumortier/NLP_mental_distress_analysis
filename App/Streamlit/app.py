@@ -99,12 +99,32 @@ def load_css():
         border: 1px solid #374151;
     }
     
+    /* Metric card with top bar and border */
     .metric-card {
-        background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-        border-radius: 10px;
-        padding: 15px;
+        background: #23272f;
+        border-radius: 12px;
+        border: 0px solid #1e2939;
+        padding: 0;
         text-align: center;
-        color: #f9fafb;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    
+    }
+    .metric-card-bar {
+        background: #1e2939;
+        color: #fff;
+        font-size: 1.0 em;
+        font-weight: bold;
+        padding: 10px 0 8px 0;
+        letter-spacing: 0.5px;
+    }
+
+    .metric-card-value {
+        background: #f3f4f6;
+        color: #23272f;
+        font-size: 2.5em;
+        font-weight: bold;
+        padding: 18px 0 14px 0;
     }
     
     /* Login page styling */
@@ -608,28 +628,48 @@ elif page == "📊 Dashboard":
     
     # Metrics
     col1, col2, col3, col4 = st.columns(4)
-    
+
     with col1:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric("🚨 Total Alerts", len(alerts_df))
-        st.markdown('</div>', unsafe_allow_html=True)
-    
+        st.markdown('''
+        <div class="metric-card">
+            <div class="metric-card-bar" style="background:#1e2939;">
+                ⚠️ Total Alerts
+            </div>
+            <div class="metric-card-value">{}</div>
+        </div>
+        '''.format(len(alerts_df)), unsafe_allow_html=True)
+
     with col2:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
         severe_count = len(alerts_df[alerts_df["level"] == "severe"]) if not alerts_df.empty else 0
-        st.metric("⚠️ Severe Cases", severe_count)
-        st.markdown('</div>', unsafe_allow_html=True)
-    
+        st.markdown('''
+        <div class="metric-card">
+            <div class="metric-card-bar" style="background:#1e2939;">
+                🚨 Severe Cases
+            </div>
+            <div class="metric-card-value">{}</div>
+        </div>
+        '''.format(severe_count), unsafe_allow_html=True)
+
     with col3:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric("💬 Help Requests", len(help_df))
-        st.markdown('</div>', unsafe_allow_html=True)
-    
+        st.markdown('''
+        <div class="metric-card">
+            <div class="metric-card-bar" style="background:#1e2939;">
+                💬 Help Requests
+            </div>
+            <div class="metric-card-value">{}</div>
+        </div>
+        '''.format(len(help_df)), unsafe_allow_html=True)
+
     with col4:
-        st.markdown('<div class="metric-card">', unsafe_allow_html=True)
         active_users = len(set(help_df["user_id"])) if not help_df.empty else 0
-        st.metric("👥 Active Users", active_users)
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('''
+        <div class="metric-card">
+            <div class="metric-card-bar" style="background:#1e2939;">
+                👥 Active Users
+            </div>
+            <div class="metric-card-value">{}</div>
+        </div>
+        '''.format(active_users), unsafe_allow_html=True)
     
     # Charts
     if not alerts_df.empty:
@@ -638,8 +678,20 @@ elif page == "📊 Dashboard":
         with col1:
             st.markdown("#### 📊 Distress Levels Distribution")
             level_counts = alerts_df["level"].value_counts()
-            fig = px.pie(values=level_counts.values, names=level_counts.index, 
-                        color_discrete_sequence=px.colors.qualitative.Set3)
+            # Define color mapping for the levels
+            color_map = {
+                "severe": "#155dfc",   # bleuish purple
+                "moderate": "#8ec5ff" # orange
+            }
+            # Get colors for the levels present in the data
+            colors = [color_map.get(level, "#90caf9") for level in level_counts.index]
+            fig = px.pie(
+                values=level_counts.values,
+                names=level_counts.index,
+                color=level_counts.index,
+                color_discrete_sequence=colors,
+                title="Distress Levels Distribution"
+            )
             st.plotly_chart(fig, use_container_width=True)
         
         with col2:
@@ -883,10 +935,85 @@ elif page == "📈 Analytics":
         
         with col1:
             st.markdown("**Weekly Alert Trends**")
-            alerts_df["timestamp"] = pd.to_datetime(alerts_df["timestamp"])
-            weekly_alerts = alerts_df.groupby(alerts_df["timestamp"].dt.isocalendar().week).size()
-            fig = px.line(x=weekly_alerts.index, y=weekly_alerts.values, 
-                         title="Weekly Alert Volume")
+            level_option = st.selectbox(
+                "Filter by distress level",
+                options=["all", "severe", "moderate"],
+                index=0,
+                key="distress_level_filter"
+            )
+
+            alerts_df["timestamp"] = pd.to_datetime(alerts_df["timestamp"], format='mixed', errors='coerce')
+            alerts_df = alerts_df.dropna(subset=["timestamp"])
+            alerts_df["year"] = alerts_df["timestamp"].dt.isocalendar().year
+            alerts_df["week"] = alerts_df["timestamp"].dt.isocalendar().week
+
+            color_map = {
+                "all": "blue",
+                "severe": "red",
+                "moderate": "orange"
+            }
+
+            # Prepare weekly counts
+            weekly_total = alerts_df.groupby(["year", "week"]).size().reset_index(name="total")
+            weekly_severe = alerts_df[alerts_df["level"] == "severe"].groupby(["year", "week"]).size().reset_index(name="severe")
+            weekly_moderate = alerts_df[alerts_df["level"] == "moderate"].groupby(["year", "week"]).size().reset_index(name="moderate")
+
+            # Merge for plotting
+            weekly = pd.merge(weekly_total, weekly_severe, on=["year", "week"], how="left")
+            weekly = pd.merge(weekly, weekly_moderate, on=["year", "week"], how="left")
+            weekly = weekly.fillna(0)
+            weekly["label"] = weekly.apply(lambda row: f"{row['year']}-W{row['week']}", axis=1)
+
+            import plotly.graph_objects as go
+
+            if level_option == "all":
+                fig = go.Figure()
+                # Bar for total
+                fig.add_trace(go.Bar(
+                    x=weekly["label"], y=weekly["total"], name="Total Alerts",
+                    marker_color=color_map["all"],
+                    text=weekly["total"], textposition="outside"
+                ))
+                # Line for severe
+                fig.add_trace(go.Scatter(
+                    x=weekly["label"], y=weekly["severe"], name="Severe",
+                    mode="lines+markers+text", line=dict(color=color_map["severe"], width=3),
+                    text=weekly["severe"], textposition="top center"
+                ))
+                # Line for moderate
+                fig.add_trace(go.Scatter(
+                    x=weekly["label"], y=weekly["moderate"], name="Moderate",
+                    mode="lines+markers+text", line=dict(color=color_map["moderate"], width=3, dash="dash"),
+                    text=weekly["moderate"], textposition="top center"
+                ))
+                fig.update_layout(
+                    title="Weekly Alert Volume (All)",
+                    xaxis_title="Year-Week", yaxis_title="Number of Alerts",
+                    barmode="overlay"
+                )
+            else:
+                # Filter for selected level
+                weekly_alerts = alerts_df[alerts_df["level"] == level_option].groupby(["year", "week"]).size()
+                labels = [f"{y}-W{w}" for y, w in weekly_alerts.index]
+                if len(weekly_alerts) > 1:
+                    fig = go.Figure(go.Scatter(
+                        x=labels, y=weekly_alerts.values, mode="lines+markers+text",
+                        name=level_option.title(), line=dict(color=color_map[level_option], width=3),
+                        text=weekly_alerts.values, textposition="top center"
+                    ))
+                else:
+                    fig = go.Figure(go.Bar(
+                        x=labels, y=weekly_alerts.values, name=level_option.title(),
+                        marker_color=color_map[level_option],
+                        text=weekly_alerts.values, textposition="outside"
+                    ))
+                    st.info("Only one week of data available. Add more alerts over time to see trends.")
+
+                fig.update_layout(
+                    title=f"Weekly Alert Volume ({level_option.title()})",
+                    xaxis_title="Year-Week", yaxis_title="Number of Alerts"
+                )
+
             st.plotly_chart(fig, use_container_width=True)
         
         with col2:

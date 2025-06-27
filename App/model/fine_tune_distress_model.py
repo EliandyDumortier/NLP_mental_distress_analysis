@@ -62,7 +62,7 @@ print(f"📊 Label distribution:\n{df['distress_level'].value_counts()}")
 
 train_texts, val_texts, train_labels, val_labels = train_test_split(
     df["text"].tolist(), df["label"].tolist(), 
-    test_size=0.2, stratify=df["label"], random_state=42
+    test_size=0.45, stratify=df["label"], random_state=42
 )
 
 print(f"📈 Training samples: {len(train_texts)}")
@@ -70,7 +70,8 @@ print(f"📊 Validation samples: {len(val_texts)}")
 
 ## === STEP 2: Tokenization ===
 print("🔄 Loading tokenizer and preparing data...")
-model_name = "bhadresh-savani/distilbert-base-uncased-emotion"
+#model_name = "bhadresh-savani/distilbert-base-uncased-emotion"
+model_name = "distilbert-base-uncased"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 train_encodings = tokenizer(train_texts, truncation=True, padding=True, max_length=512)
@@ -100,8 +101,8 @@ config = AutoConfig.from_pretrained(
     num_labels=4,
     id2label=id2label,
     label2id=label2id,
-    attention_probs_dropout_prob=0.3,
-    hidden_dropout_prob=0.3
+    attention_probs_dropout_prob=0.4,
+    hidden_dropout_prob=0.4
 )
 
 model = AutoModelForSequenceClassification.from_pretrained(
@@ -142,18 +143,19 @@ training_args = TrainingArguments(
     load_best_model_at_end=True,
     metric_for_best_model="f1",
     greater_is_better=True,
-    learning_rate=2e-5,
-    per_device_train_batch_size=16,
+    learning_rate=1e-5,  # or 1e-5 if still overfitting
+    per_device_train_batch_size=8,
     per_device_eval_batch_size=32,
-    gradient_accumulation_steps=1,
-    num_train_epochs=5,
-    weight_decay=0.01,
+    gradient_accumulation_steps=3,  # <--- increase to reduce overfitting
+    num_train_epochs=3,
+    weight_decay=0.1,
     lr_scheduler_type="cosine",
     warmup_ratio=0.1,
     fp16=torch.cuda.is_available(),
-    report_to="none",  # Disable wandb
+    report_to="none",
     logging_steps=50,
     eval_steps=100,
+    label_smoothing_factor=0.1,  # <--- add this
 )
 
 # Initialize callbacks
@@ -167,7 +169,7 @@ trainer = Trainer(
     eval_dataset=val_dataset,
     compute_metrics=compute_metrics,
     callbacks=[
-        EarlyStoppingCallback(early_stopping_patience=3),
+        EarlyStoppingCallback(early_stopping_patience=2),  # <--- stricter early stopping
         history_callback
     ]
 )
