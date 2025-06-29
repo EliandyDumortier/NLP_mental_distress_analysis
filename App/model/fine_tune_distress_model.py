@@ -20,6 +20,25 @@ from transformers import (
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from sklearn.utils.class_weight import compute_class_weight
+
+# Prevent system sleep (Linux, macOS, Windows)
+import platform
+import subprocess
+import atexit
+
+if platform.system() == "Linux":
+    # Start a background process to inhibit sleep
+    inhibitor = subprocess.Popen(["caffeinate", "-d"])
+    atexit.register(inhibitor.terminate)
+elif platform.system() == "Darwin":
+    inhibitor = subprocess.Popen(["caffeinate"])
+    atexit.register(inhibitor.terminate)
+elif platform.system() == "Windows":
+    import ctypes
+    ES_CONTINUOUS = 0x80000000
+    ES_SYSTEM_REQUIRED = 0x00000001
+    ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)
 
 ## === Custom Callback to Track Training History ===
 class TrainingHistoryCallback(TrainerCallback):
@@ -62,7 +81,7 @@ print(f"📊 Label distribution:\n{df['distress_level'].value_counts()}")
 
 train_texts, val_texts, train_labels, val_labels = train_test_split(
     df["text"].tolist(), df["label"].tolist(), 
-    test_size=0.45, stratify=df["label"], random_state=42
+    test_size=0.2, stratify=df["label"], random_state=42
 )
 
 print(f"📈 Training samples: {len(train_texts)}")
@@ -74,8 +93,9 @@ print("🔄 Loading tokenizer and preparing data...")
 model_name = "distilbert-base-uncased"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-train_encodings = tokenizer(train_texts, truncation=True, padding=True, max_length=512)
-val_encodings = tokenizer(val_texts, truncation=True, padding=True, max_length=512)
+# For faster training, reduce max_length (if your texts are not very long)
+train_encodings = tokenizer(train_texts, truncation=True, padding=True, max_length=128)
+val_encodings = tokenizer(val_texts, truncation=True, padding=True, max_length=128)
 
 ## === STEP 3: Dataset Wrapper ===
 class DistressDataset(Dataset):
@@ -134,28 +154,32 @@ results_dir = os.path.join(BASE_DIR, "App/model/results")
 os.makedirs(checkpoints_dir, exist_ok=True)
 os.makedirs(results_dir, exist_ok=True)
 
+# Compute class weights
+class_weights = compute_class_weight('balanced', classes=np.unique(df['label']), y=df['label'])
+class_weights = torch.tensor(class_weights, dtype=torch.float)
+
 training_args = TrainingArguments(
     output_dir=checkpoints_dir,
-    evaluation_strategy="epoch",
+    evaluation_strategy="epoch",      # more frequent eval
+    eval_steps=1000,
     save_strategy="epoch",
-    logging_strategy="epoch",
+    logging_strategy="steps",
+    logging_steps=200,
     save_total_limit=3,
     load_best_model_at_end=True,
     metric_for_best_model="f1",
     greater_is_better=True,
-    learning_rate=1e-5,  # or 1e-5 if still overfitting
-    per_device_train_batch_size=8,
-    per_device_eval_batch_size=32,
-    gradient_accumulation_steps=3,  # <--- increase to reduce overfitting
-    num_train_epochs=3,
-    weight_decay=0.1,
-    lr_scheduler_type="cosine",
-    warmup_ratio=0.1,
+    learning_rate=2e-5,
+    per_device_train_batch_size=16,
+    per_device_eval_batch_size=64,
+    gradient_accumulation_steps=2,
+    num_train_epochs=5,
+    weight_decay=0.2,
+    lr_scheduler_type="cosine_with_restarts",
+    warmup_ratio=0.2,
     fp16=torch.cuda.is_available(),
     report_to="none",
-    logging_steps=50,
-    eval_steps=100,
-    label_smoothing_factor=0.1,  # <--- add this
+    label_smoothing_factor=0.15,
 )
 
 # Initialize callbacks
@@ -335,3 +359,4 @@ print("🎉 Training completed successfully!")
 print(f"📁 Model saved to: {model_save_path}")
 print(f"📁 Results saved to: {results_dir}")
 print("=" * 50)
+

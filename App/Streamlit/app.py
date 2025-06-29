@@ -867,7 +867,6 @@ elif page == "💬 Help Messages":
 
 elif page == "📈 Analytics":
     st.markdown('<div class="admin-page">', unsafe_allow_html=True)
-    
     st.markdown("### 📈 Advanced Analytics Dashboard")
     
     # Load training results if available
@@ -876,25 +875,33 @@ elif page == "📈 Analytics":
         with open(training_results_path, 'r') as f:
             training_results = json.load(f)
         
+        # --- Performance Bar Chart with tags ---
+        metrics_df = pd.DataFrame({
+            'Metric': ['Accuracy', 'F1-Score', 'Precision', 'Recall'],
+            'Score': [
+                training_results.get('final_accuracy', 0.0),
+                training_results.get('final_f1', 0.0),
+                training_results.get('final_precision', 0.0),
+                training_results.get('final_recall', 0.0)
+            ]
+        })
         col1, col2 = st.columns(2)
-        
         with col1:
             st.markdown("#### 🎯 Model Performance")
-            metrics_df = pd.DataFrame({
-                'Metric': ['Accuracy', 'F1-Score', 'Precision', 'Recall'],
-                'Score': [
-                    training_results.get('final_accuracy', 0.942),
-                    training_results.get('final_f1', 0.938),
-                    training_results.get('final_precision', 0.935),
-                    training_results.get('final_recall', 0.940)
-                ]
-            })
-            
-            fig = px.bar(metrics_df, x='Metric', y='Score', 
-                        title="Model Performance Metrics")
-            fig.update_layout(yaxis=dict(range=[0.9, 1.0]))
+            fig = px.bar(
+                metrics_df, x='Metric', y='Score', 
+                title="Model Performance Metrics",
+                text=metrics_df['Score'].apply(lambda x: f"{x:.3f}")
+            )
+            fig.update_traces(textposition='outside')
+            fig.update_layout(
+                yaxis=dict(range=[0.0, 1.0]),
+                showlegend=False,
+                margin=dict(t=40, b=40)
+            )
             st.plotly_chart(fig, use_container_width=True)
         
+        # --- Training History Line Chart ---
         with col2:
             st.markdown("#### 📊 Training History")
             if 'training_history' in training_results:
@@ -902,24 +909,27 @@ elif page == "📈 Analytics":
                 if not history_df.empty:
                     fig = make_subplots(specs=[[{"secondary_y": True}]])
                     
-                    if 'train_loss' in history_df.columns:
+                    if 'loss' in history_df.columns:
                         fig.add_trace(
-                            go.Scatter(x=history_df['epoch'], y=history_df['train_loss'], 
-                                      name="Training Loss"),
+                            go.Scatter(x=history_df['epoch'], y=history_df['loss'], 
+                                      name="Training Loss", mode="lines+markers"),
                             secondary_y=False,
                         )
                     
                     if 'eval_accuracy' in history_df.columns:
                         fig.add_trace(
                             go.Scatter(x=history_df['epoch'], y=history_df['eval_accuracy'], 
-                                      name="Validation Accuracy"),
+                                      name="Validation Accuracy", mode="lines+markers"),
                             secondary_y=True,
                         )
                     
                     fig.update_xaxes(title_text="Epoch")
                     fig.update_yaxes(title_text="Loss", secondary_y=False)
                     fig.update_yaxes(title_text="Accuracy", secondary_y=True)
-                    
+                    fig.update_layout(
+                        margin=dict(t=40, b=40),
+                        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+                    )
                     st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("🔄 Training results not available. Run the model training script to generate analytics.")
