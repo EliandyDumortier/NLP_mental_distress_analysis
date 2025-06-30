@@ -271,11 +271,11 @@ def create_about_section():
             
             <div class="stats-row">
                 <div class="stat-item">
-                    <div class="stat-number">94.2%</div>
+                    <div class="stat-number">83.6%</div>
                     <div class="stat-label">Accuracy</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">93.8%</div>
+                    <div class="stat-number">83.2%</div>
                     <div class="stat-label">F1-Score</div>
                 </div>
                 <div class="stat-item">
