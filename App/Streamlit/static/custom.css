@@ -1,0 +1,325 @@
+/* Enhanced Facebook-like Styling for Friendbook */
+
+/* Global Variables */
+:root {
+  /* Facebook Colors */
+  
+  --fb-blue: #1877f2;
+  --fb-light-blue: #42a5f5;
+  --fb-bg: #f0f2f5;
+  --fb-white: #ffffff;
+  --fb-text: #1c1e21;
+  --fb-gray: #65676b;
+  --fb-light-gray: #e4e6ea;
+  
+  /* Admin Dark Theme */
+  --admin-bg: #111827;
+  --admin-card: #1f2937;
+  --admin-text: #f9fafb;
+  --admin-border: #374151;
+  --admin-accent: #6b7280;
+}
+
+/* User Theme Styling */
+.user-theme {
+  background: var(--fb-bg);
+  color: var(--fb-text);
+}
+
+.user-page {
+  background: linear-gradient(135deg, #e3f2fd 0%, var(--fb-bg) 100%);
+  border-radius: 15px;
+  padding: 25px;
+  margin: 15px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Post Styling */
+.post-card {
+  background: var(--fb-white);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 15px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-left: 4px solid var(--fb-blue);
+  transition: all 0.3s ease;
+}
+
+.post-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+.distress-post {
+  border-left: 4px solid #f44336;
+  background: linear-gradient(to right, #ffebee, var(--fb-white));
+  animation: gentle-pulse 2s infinite;
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+}
+
+/* Button Styling */
+.help-button {
+  background: linear-gradient(135deg, var(--fb-blue), var(--fb-light-blue));
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(24, 119, 242, 0.3);
+}
+
+.help-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(24, 119, 242, 0.4);
+}
+
+/* Admin Theme Styling */
+.admin-theme {
+  background: var(--admin-bg);
+  color: var(--admin-text);
+}
+
+.admin-page {
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  border-radius: 15px;
+  padding: 25px;
+  margin: 15px 0;
+}
+
+.admin-card {
+  background: var(--admin-card);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 15px 0;
+  border: 1px solid var(--admin-border);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.metric-card {
+  background: linear-gradient(135deg, var(--admin-card) 0%, var(--admin-border) 100%);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  color: var(--admin-text);
+  border: 1px solid var(--admin-accent);
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+/* Login Page Styling */
+.login-container {
+  background: linear-gradient(135deg, var(--fb-blue) 0%, var(--fb-light-blue) 100%);
+  border-radius: 20px;
+  padding: 40px;
+  color: white;
+  box-shadow: 0 8px 24px rgba(24, 119, 242, 0.3);
+}
+
+.about-section {
+  background: var(--fb-white);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 20px 0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  border: 1px solid var(--fb-light-gray);
+}
+
+/* Navigation Header */
+.nav-header {
+  background: linear-gradient(135deg, var(--fb-blue), var(--fb-light-blue));
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+}
+
+.nav-header.admin-theme {
+  background: linear-gradient(135deg, var(--admin-card), var(--admin-border));
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Form Styling */
+.stTextInput > div > div > input {
+  border-radius: 8px;
+  border: 2px solid var(--fb-light-gray);
+  padding: 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.stTextInput > div > div > input:focus {
+  border-color: var(--fb-blue);
+  box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+}
+
+.stTextArea > div > div > textarea {
+  border-radius: 8px;
+  border: 2px solid var(--fb-light-gray);
+  padding: 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.stTextArea > div > div > textarea:focus {
+  border-color: var(--fb-blue);
+  box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+}
+
+/* Button Enhancements */
+.stButton > button {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 12px 24px;
+}
+
+.stButton > button[kind="primary"] {
+  background: linear-gradient(135deg, var(--fb-blue), var(--fb-light-blue));
+  color: white;
+  box-shadow: 0 2px 4px rgba(24, 119, 242, 0.3);
+}
+
+.stButton > button[kind="primary"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(24, 119, 242, 0.4);
+}
+
+/* Sidebar Styling */
+.css-1d391kg {
+  background: var(--fb-white);
+  border-right: 1px solid var(--fb-light-gray);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px;
+  color: var(--fb-gray);
+  font-size: 14px;
+  margin-top: 50px;
+  border-top: 1px solid var(--fb-light-gray);
+  background: var(--fb-white);
+  border-radius: 12px;
+}
+
+/* Alerts and Messages */
+.stAlert {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.stSuccess {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #155724;
+  border-left: 4px solid #28a745;
+}
+
+.stError {
+  background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+  color: #721c24;
+  border-left: 4px solid #dc3545;
+}
+
+.stWarning {
+  background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+  color: #856404;
+  border-left: 4px solid #ffc107;
+}
+
+.stInfo {
+  background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+  color: #0c5460;
+  border-left: 4px solid #17a2b8;
+}
+
+/* Expandable Sections */
+.streamlit-expanderHeader {
+  background: var(--fb-white);
+  border-radius: 8px;
+  border: 1px solid var(--fb-light-gray);
+  font-weight: 600;
+}
+
+/* Progress Bars */
+.stProgress > div > div > div {
+  background: linear-gradient(90deg, var(--fb-blue), var(--fb-light-blue));
+  border-radius: 4px;
+}
+
+/* Charts and Metrics */
+.metric {
+  background: var(--fb-white);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  border-left: 4px solid var(--fb-blue);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .user-page, .admin-page {
+    padding: 15px;
+    margin: 10px 0;
+  }
+  
+  .post-card, .admin-card {
+    padding: 15px;
+    margin: 10px 0;
+  }
+  
+  .nav-header {
+    font-size: 22px;
+    padding: 15px;
+  }
+  
+  .login-container, .about-section {
+    padding: 20px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.post-card, .admin-card, .metric-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--fb-light-gray);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--fb-blue);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--fb-light-blue);
+}

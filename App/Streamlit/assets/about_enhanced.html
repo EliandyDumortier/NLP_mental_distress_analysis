@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Friendbook - Mental Health Social Network</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1c1e21;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(24, 119, 242, 0.9), rgba(66, 165, 245, 0.9)),
+                        url('https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(24, 119, 242, 0.8);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero-title {
+            font-size: 4em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .content-section {
+            background: white;
+            margin: 40px 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #1877f2, #42a5f5);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .section-content {
+            padding: 50px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border-left: 5px solid #1877f2;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(24, 119, 242, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .feature-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #1877f2;
+            margin-bottom: 15px;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .tech-badge {
+            background: linear-gradient(135deg, #1877f2, #42a5f5);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .tech-badge:hover {
+            transform: translateY(-2px);
+        }
+        
+        .emergency-section {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-left: 5px solid #ffc107;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .emergency-section h3 {
+            color: #856404;
+            margin-bottom: 20px;
+        }
+        
+        .emergency-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .emergency-list li {
+            background: rgba(255, 255, 255, 0.7);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #ffc107;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            text-align: center;
+            padding: 60px 40px;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #28a745;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-top: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .footer {
+            background: #1c1e21;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5em;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2em;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .section-content {
+                padding: 30px 20px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2em;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">🤝 Friendbook</h1>
+            <p class="hero-subtitle">AI-Powered Mental Health Social Network</p>
+            <p style="font-size: 1.2em; margin-bottom: 30px;">
+                Where technology meets compassion to create a safer, more supportive online community
+            </p>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-number">94.2%</span>
+                    <span class="stat-label">AI Accuracy</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Support Available</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Distress Levels</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Care & Compassion</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </section>
+
+    <div class="container">
+        <!-- Mission Section -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>🎯 Our Mission</h2>
+                <p>Revolutionizing social media for mental health</p>
+            </div>
+            <div class="section-content">
+                <p style="font-size: 1.2em; text-align: center; margin-bottom: 40px;">
+                    Friendbook is more than just a social network. We're pioneering a new era of digital wellness where artificial intelligence works hand-in-hand with human compassion to identify, support, and connect people who need help most.
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">🧠</span>
+                        <h3 class="feature-title">AI-Powered Detection</h3>
+                        <p>Our advanced NLP model analyzes posts in real-time to identify emotional distress with 94.2% accuracy, ensuring no cry for help goes unnoticed.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">💙</span>
+                        <h3 class="feature-title">Immediate Support</h3>
+                        <p>When distress is detected, users are immediately connected with resources, support systems, and caring community members.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🔒</span>
+                        <h3 class="feature-title">Privacy First</h3>
+                        <p>Your mental health journey is private. All conversations are confidential, and help is offered with complete discretion.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🤝</span>
+                        <h3 class="feature-title">Community Care</h3>
+                        <p>Connect with others who understand your journey. Build meaningful relationships in a safe, supportive environment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technology Section -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>🧠 Advanced AI Technology</h2>
+                <p>Powered by cutting-edge machine learning</p>
+            </div>
+            <div class="section-content">
+                <p style="text-align: center; font-size: 1.1em; margin-bottom: 30px;">
+                    Our AI model is built on fine-tuned DistilBERT architecture, specifically trained on mental health datasets to recognize four distinct levels of emotional distress:
+                </p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card" style="border-left-color: #28a745;">
+                        <span class="feature-icon">😊</span>
+                        <h3 class="feature-title" style="color: #28a745;">No Distress</h3>
+                        <p>Normal, positive communication patterns indicating good mental health and well-being.</p>
+                    </div>
+                    <div class="feature-card" style="border-left-color: #ffc107;">
+                        <span class="feature-icon">😐</span>
+                        <h3 class="feature-title" style="color: #ffc107;">Mild Distress</h3>
+                        <p>Minor concerns, everyday stress, or temporary emotional challenges that are manageable.</p>
+                    </div>
+                    <div class="feature-card" style="border-left-color: #fd7e14;">
+                        <span class="feature-icon">😟</span>
+                        <h3 class="feature-title" style="color: #fd7e14;">Moderate Distress</h3>
+                        <p>Significant emotional distress requiring attention and support from community or professionals.</p>
+                    </div>
+                    <div class="feature-card" style="border-left-color: #dc3545;">
+                        <span class="feature-icon">😰</span>
+                        <h3 class="feature-title" style="color: #dc3545;">Severe Distress</h3>
+                        <p>Critical situations requiring immediate intervention and emergency mental health resources.</p>
+                    </div>
+                </div>
+                
+                <h3 style="text-align: center; margin: 40px 0 20px 0; color: #1877f2;">Technology Stack</h3>
+                <div class="tech-stack">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Streamlit</span>
+                    <span class="tech-badge">Transformers</span>
+                    <span class="tech-badge">PyTorch</span>
+                    <span class="tech-badge">DistilBERT</span>
+                    <span class="tech-badge">Plotly</span>
+                    <span class="tech-badge">Pandas</span>
+                    <span class="tech-badge">Scikit-learn</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Resources Section -->
+        <div class="content-section">
+            <div class="section-header" style="background: linear-gradient(135deg, #dc3545, #fd7e14);">
+                <h2>🚨 Emergency Resources</h2>
+                <p>Immediate help when you need it most</p>
+            </div>
+            <div class="section-content">
+                <div class="emergency-section">
+                    <h3>🆘 Crisis Hotlines - Available 24/7</h3>
+                    <ul class="emergency-list">
+                        <li><strong>🇺🇸 United States:</strong> 988 (Suicide & Crisis Lifeline)</li>
+                        <li><strong>📱 Crisis Text Line:</strong> Text HOME to 741741</li>
+                        <li><strong>🇬🇧 United Kingdom:</strong> 116 123 (Samaritans)</li>
+                        <li><strong>🇨🇦 Canada:</strong> 1-833-456-4566</li>
+                        <li><strong>🇦🇺 Australia:</strong> 13 11 14 (Lifeline)</li>
+                        <li><strong>🌍 International:</strong> <a href="https://befrienders.org" target="_blank">befrienders.org</a></li>
+                    </ul>
+                </div>
+                
+                <p style="text-align: center; font-size: 1.1em; margin-top: 30px; font-style: italic;">
+                    <strong>Remember:</strong> If you're in immediate danger, call your local emergency services (911, 999, 112, etc.)
+                </p>
+            </div>
+        </div>
+
+        <!-- Call to Action Section -->
+        <div class="content-section">
+            <div class="cta-section">
+                <h2>Join the Mental Health Revolution</h2>
+                <p style="font-size: 1.2em; margin-bottom: 20px;">
+                    Be part of a community that truly cares about mental health and human connection.
+                </p>
+                <p>Together, we can create a social network that heals rather than harms.</p>
+                <a href="#" class="cta-button">Get Started Today</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <h3>🤝 Friendbook</h3>
+            <p>Mental Health Social Network</p>
+            <p style="margin-top: 20px; opacity: 0.8;">
+                Made with ❤️ for mental health awareness and support
+            </p>
+            <p style="margin-top: 10px; font-style: italic;">
+                Remember: You're never alone, and it's okay to ask for help
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
